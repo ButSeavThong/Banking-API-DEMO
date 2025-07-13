@@ -20,4 +20,5 @@ public interface AccountService {
 
     AccountResponse updateAccountByAccountNumber(String accountNumber, UpdateAccountRequest updateAccountRequest);
 
+    void disableAccountByAccountNumber(String accountNumber);
 }

@@ -1,5 +1,6 @@
 package kh.coding.fullstackjpa.repository;
 
+import jakarta.transaction.Transactional;
 import kh.coding.fullstackjpa.domain.Account;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
@@ -25,4 +26,8 @@ public interface AccountRepository
     @Query("DELETE FROM Account a WHERE a.accountNumber = :accountNumber")
     void deleteByAccountNumber(@Param("accountNumber") String accountNumber);
 
+    @Modifying
+    @Transactional
+    @Query("UPDATE Account a SET a.isDeleted = true WHERE a.accountNumber = :accountNumber")
+    int disableAccountByAccountNumber(@Param("accountNumber") String accountNumber);
 }

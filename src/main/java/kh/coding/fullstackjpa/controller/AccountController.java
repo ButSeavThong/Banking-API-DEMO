@@ -51,4 +51,10 @@ public class AccountController {
         return accountService.updateAccountByAccountNumber(accountNumber,updateAccountRequest);
     }
 
+    @PutMapping("/{accountNumber}")
+    public ResponseEntity<String> disableAccountByAccountNumber(@PathVariable String accountNumber) {
+        accountService.disableAccountByAccountNumber(accountNumber);
+        return ResponseEntity.ok("Account disabled successfully.");
+    }
+
 }

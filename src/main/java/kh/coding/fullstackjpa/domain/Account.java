@@ -29,7 +29,7 @@ public class Account {
     private String actCurrency;
 
     @Column(nullable=false)
-    Boolean isDeleted;
+    private Boolean isDeleted = false;
 
 
     @ManyToOne

@@ -1,5 +1,6 @@
 package kh.coding.fullstackjpa.service.impl;
 
+import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import kh.coding.fullstackjpa.domain.Account;
 import kh.coding.fullstackjpa.domain.Customer;
@@ -102,5 +103,13 @@ public class AccountServiceImpl implements AccountService {
         account =  accountRepository.save(account);
 
         return accountMapper.fromAccount(account);
+    }
+
+    @Override
+    public void disableAccountByAccountNumber(String accountNumber) {
+        int updated = accountRepository.disableAccountByAccountNumber(accountNumber);
+        if (updated == 0) {
+            throw new EntityNotFoundException("Account not found with accountNumber: " + accountNumber);
+        }
     }
 }
