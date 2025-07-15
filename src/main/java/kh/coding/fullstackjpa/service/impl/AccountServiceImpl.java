@@ -41,7 +41,6 @@ public class AccountServiceImpl implements AccountService {
             Account account = new Account();
             account.setAccountNumber(createAccountRequest.accountNumber());
             account.setBalance(createAccountRequest.balance());
-            account.setAccountType(createAccountRequest.accountType());
             account.setActCurrency(createAccountRequest.actCurrency());
             account.setIsDeleted(false);
             account.setCustomer(customer);

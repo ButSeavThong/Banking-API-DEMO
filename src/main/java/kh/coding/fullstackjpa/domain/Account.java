@@ -5,6 +5,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.List;
+
 @Setter
 @Getter
 @NoArgsConstructor
@@ -22,8 +24,6 @@ public class Account {
     @Column(nullable=false, length=25 )
     private Double balance;
 
-    @Column(nullable=false,length=25)
-    private String accountType;
 
     @Column(nullable=false, length=25)
     private String actCurrency;
@@ -31,8 +31,17 @@ public class Account {
     @Column(nullable=false)
     private Boolean isDeleted = false;
 
+    private Double overLimit;
 
-    @ManyToOne
+
+    @ManyToOne(optional = false)
     @JoinColumn(name="cust_id",referencedColumnName = "id")
     private Customer customer;
+
+    @ManyToOne(optional = false)
+    private AccountType accountType;
+
+
+    @OneToMany(mappedBy = "sender")
+    private List<Transaction> transaction;
 }

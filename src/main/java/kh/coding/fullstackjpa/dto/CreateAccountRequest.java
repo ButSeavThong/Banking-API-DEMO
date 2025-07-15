@@ -14,9 +14,6 @@ public record CreateAccountRequest(
         Double balance,
 
         @NotBlank
-        String accountType,
-
-        @NotBlank
         String actCurrency,
 
         @NotNull

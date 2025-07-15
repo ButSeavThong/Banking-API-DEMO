@@ -29,14 +29,17 @@ public class Customer {
 
 
     @Column(unique=true, nullable=true)
-    private String phone;
+    private String phoneNumber;
+
+    @Column(unique=true)
+    private String nationalCardId;
 
 
     @Column(columnDefinition = "TEXT")
     private String remark;
 
     @Column(nullable=false)
-    private Boolean isDeleted;
+    private Boolean isDeleted; // soft deleted ( just disabled )  // hard deleted = delete permanantly
 
     @OneToMany(mappedBy = "customer")
     private List<Account> accounts;
@@ -44,5 +47,10 @@ public class Customer {
     @OneToOne(mappedBy = "customer", cascade = CascadeType.ALL)
     @PrimaryKeyJoinColumn
     private KYC kyc;
+
+
+    // many customer can i have on segment !
+    @ManyToOne(optional = false)
+    private Segment segment;
 
 }

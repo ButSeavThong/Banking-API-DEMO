@@ -9,7 +9,8 @@ public record CreateCustomerRequest(
         @NotBlank(message = "required")
         String gender,
         String email,
-        String phone,
-        String remark
+        String phoneNumber,
+        String remark,
+        String nationalCardId
 ) {
 }

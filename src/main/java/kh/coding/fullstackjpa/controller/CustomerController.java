@@ -48,4 +48,10 @@ public class CustomerController {
         return customerService.updateByPhoneNumber(phoneNumber, updateCustomerRequest);
     }
 
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    @PutMapping("/{phoneNumber}")
+    public void disableByPhoneNumber( @PathVariable String phoneNumber) {
+        customerService.disableByPhoneNumber(phoneNumber);
+    }
+
 }

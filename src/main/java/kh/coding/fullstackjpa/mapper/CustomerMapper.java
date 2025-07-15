@@ -2,6 +2,7 @@ package kh.coding.fullstackjpa.mapper;
 
 
 import kh.coding.fullstackjpa.domain.Customer;
+import kh.coding.fullstackjpa.dto.CreateCustomerRequest;
 import kh.coding.fullstackjpa.dto.CustomerResponse;
 import kh.coding.fullstackjpa.dto.UpdateCustomerRequest;
 import org.mapstruct.BeanMapping;
@@ -25,4 +26,7 @@ public interface CustomerMapper {
     CustomerResponse fromCustomer(Customer customer);
 
     Customer toCustomer(CustomerResponse customerResponse);
+
+    Customer fromcreateRequestToCustomer(CreateCustomerRequest createCustomerRequest);
+
 }

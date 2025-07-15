@@ -20,7 +20,7 @@ public class KYC {
     private Boolean isVerified;
     private Boolean isDeleted;
 
-    @OneToOne
+    @OneToOne(optional = false)
     @MapsId
     @JoinColumn(name="cust_id")
     private Customer customer;

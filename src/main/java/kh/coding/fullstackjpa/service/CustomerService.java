@@ -13,4 +13,5 @@ public interface CustomerService  {
     List<CustomerResponse> getAllCustomers();
     CustomerResponse findCustomerByPhoneNumber(String phoneNumber);
     CustomerResponse updateByPhoneNumber(String phoneNumebr, UpdateCustomerRequest updateCustomerRequest);
+    void disableByPhoneNumber(String phone);
 }
