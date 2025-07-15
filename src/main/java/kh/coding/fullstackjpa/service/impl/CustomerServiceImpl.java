@@ -31,30 +31,21 @@ public class CustomerServiceImpl implements CustomerService {
 
     private final SegmentRepository segmentRepository;
 
-    @Transactional
-    @Override
-    public void disableByPhoneNumber(String phoneNumber) {
-
-        if(!customerRepository.isExistsByPhoneNumber(phoneNumber)) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Customer not found");
-        }
-        customerRepository.disableByPhoneNumber(phoneNumber);
-
-    }
 
     @Override
     public CustomerResponse createNew(CreateCustomerRequest createCustomerRequest) {
+
         // validate email
         if(customerRepository.existsByEmail(createCustomerRequest.email())){
             throw new ResponseStatusException(HttpStatus.CONFLICT, "Email already in use");
         }
 
-        // Phone number
+        // validate phone
         if(customerRepository.existsByPhoneNumber(createCustomerRequest.phoneNumber())){
             throw new ResponseStatusException(HttpStatus.CONFLICT, "Phone already in use");
         }
 
-        // national card
+        // validate national card
         if(customerRepository.existsByNationalCardId(createCustomerRequest.nationalCardId())) {
             throw new ResponseStatusException(HttpStatus.CONFLICT, "National Card ID not unique");
         }
@@ -63,19 +54,17 @@ public class CustomerServiceImpl implements CustomerService {
         customer.setIsDeleted(false);
         customer.setAccounts(new ArrayList<>());
 
-        // assign segment to customer
-        List<Segment> segments = new ArrayList<>();
-        Segment segment =  segmentRepository.findBySegment("Regular")
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Segment not found"));
-        segments.add(segment);
+        // assign default segment
+        Segment segment = segmentRepository.findBySegment("Regular")
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Default segment not found"));
 
-        // add segment to cus
         customer.setSegment(segment);
 
         customer = customerRepository.save(customer);
 
-        return  customerMapper.fromCustomer(customer);
+        return customerMapper.fromCustomer(customer);
     }
+
 
     @Override
     public List<CustomerResponse> getAllCustomers() {
@@ -113,5 +102,15 @@ public class CustomerServiceImpl implements CustomerService {
     }
 
 
+    @Transactional
+    @Override
+    public void disableByPhoneNumber(String phoneNumber) {
+
+        if(!customerRepository.isExistsByPhoneNumber(phoneNumber)) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Customer not found");
+        }
+        customerRepository.disableByPhoneNumber(phoneNumber);
+
+    }
 
 }

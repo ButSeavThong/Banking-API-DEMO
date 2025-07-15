@@ -20,4 +20,7 @@ public interface AccountMapper {
 
     Account toAccount(AccountResponse accountResponse);
 
+    Account fromCreateRequestToAccount(CreateAccountRequest createAccountRequest);
+
+
 }

@@ -28,26 +28,38 @@ public class AccountServiceImpl implements AccountService {
     private final CustomerRepository customerRepository;
 
     @Override
+    public AccountResponse createNewAccount(CreateAccountRequest createAccountRequest) {
 
-            public AccountResponse createNewAccount(CreateAccountRequest createAccountRequest) {
-
-            if(accountRepository.existsByAccountNumber(createAccountRequest.accountNumber())){
-                throw new ResponseStatusException(HttpStatus.CONFLICT, " Account number already in use");
-            }
-
-            Customer customer  = customerRepository.findById(createAccountRequest.customerId())
-                    .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Customer not found"));
-
-            Account account = new Account();
-            account.setAccountNumber(createAccountRequest.accountNumber());
-            account.setBalance(createAccountRequest.balance());
-            account.setActCurrency(createAccountRequest.actCurrency());
-            account.setIsDeleted(false);
-            account.setCustomer(customer);
-            accountRepository.save(account);
-            return accountMapper.fromAccount(account) ;
-
+        if(accountRepository.existsByAccountNumber(createAccountRequest.accountNumber())){
+            throw new ResponseStatusException(HttpStatus.CONFLICT, " Account number already in use");
         }
+
+        Customer customer = customerRepository.findById(createAccountRequest.customerId())
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Customer not found"));
+
+        Account account = accountMapper.fromCreateRequestToAccount(createAccountRequest);
+        account.setCustomer(customer);
+
+        // Set overLimit based on segment
+        String segment = customer.getSegment().getSegment();
+        if (segment == null) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Customer has no segment assigned.");
+        }
+        double overLimit = switch (segment) {
+            case "Gold" -> 50000;
+            case "Silver" -> 30000;
+            case "Regular" -> 20000;
+            default -> 5000;
+        };
+        account.setOverLimit(overLimit);
+
+        // Save and return
+        account = accountRepository.save(account);
+
+
+        return accountMapper.fromAccount(account);
+    }
+
 
     @Override
         public List<AccountResponse> findAllAccounts() {
