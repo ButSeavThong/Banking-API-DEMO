@@ -3,12 +3,14 @@ package kh.coding.fullstackjpa.service.impl;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import kh.coding.fullstackjpa.domain.Account;
+import kh.coding.fullstackjpa.domain.AccountType;
 import kh.coding.fullstackjpa.domain.Customer;
 import kh.coding.fullstackjpa.dto.AccountResponse;
 import kh.coding.fullstackjpa.dto.CreateAccountRequest;
 import kh.coding.fullstackjpa.dto.UpdateAccountRequest;
 import kh.coding.fullstackjpa.mapper.AccountMapper;
 import kh.coding.fullstackjpa.repository.AccountRepository;
+import kh.coding.fullstackjpa.repository.AccountTypeRepository;
 import kh.coding.fullstackjpa.repository.CustomerRepository;
 import kh.coding.fullstackjpa.service.AccountService;
 import lombok.RequiredArgsConstructor;
@@ -25,7 +27,10 @@ public class AccountServiceImpl implements AccountService {
     private final AccountRepository accountRepository;
 
     private final AccountMapper accountMapper;
+
     private final CustomerRepository customerRepository;
+
+    private final AccountTypeRepository accountTypeRepository;
 
     @Override
     public AccountResponse createNewAccount(CreateAccountRequest createAccountRequest) {
@@ -39,6 +44,10 @@ public class AccountServiceImpl implements AccountService {
 
         Account account = accountMapper.fromCreateRequestToAccount(createAccountRequest);
         account.setCustomer(customer);
+
+        AccountType accountType = accountTypeRepository.findById(2).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Account type not found"));
+
+        account.setAccountType(accountType);
 
         // Set overLimit based on segment
         String segment = customer.getSegment().getSegment();

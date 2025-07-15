@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 
 @RestController
-@RequestMapping("/kyc")
+@RequestMapping("/api/v1/kyc")
 @RequiredArgsConstructor
 public class KYCController {
     private final KYCRepository kycRepository;

@@ -20,6 +20,9 @@ public record CreateAccountRequest(
         Boolean isDeleted,
 
         @NotNull
-        Integer customerId
+        Integer customerId,
+
+        @NotBlank
+        String segment
 ) {}
 
