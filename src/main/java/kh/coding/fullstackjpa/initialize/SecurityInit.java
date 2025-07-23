@@ -59,7 +59,7 @@ public class SecurityInit {
             userCustomer.setRoles(List.of(defaultRole, customer));
 
             userRepository.saveAll(List.of(userAdmin,userStaff,userCustomer));
-        }
+        }   
     }
 
 }
